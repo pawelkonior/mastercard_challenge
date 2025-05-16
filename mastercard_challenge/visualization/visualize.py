@@ -82,51 +82,6 @@ def plot_fraud_heatmap(df: pd.DataFrame, row: str, col: str, title: str = "Fraud
     plt.show()
 
 
-def plot_correlation_matrix(df: pd.DataFrame, cols: Optional[list] = None, title: str = "Correlation Matrix") -> None:
-    """
-    Plot a heatmap of correlation between selected numeric features.
-
-    Args:
-        df: DataFrame containing the data.
-        cols: List of columns to compute correlation. If None, all numeric columns are used.
-        title: Title of the plot.
-    """
-    if cols is None:
-        cols = df.select_dtypes(include=np.number).columns.tolist()
-    corr = df[cols].corr()
-    plt.figure(figsize=(8, 6))
-    sns.heatmap(corr, annot=True, cmap="coolwarm", fmt=".2f")
-    plt.title(title)
-    plt.tight_layout()
-    plt.show()
-
-
-def boxplot_with_swarm(
-    df: pd.DataFrame,
-    x: str,
-    y: str,
-    hue: Optional[str] = None,
-    title: str = ""
-) -> None:
-    """
-    Draw a boxplot with an overlaid swarmplot.
-
-    Args:
-        df: DataFrame containing the data.
-        x: Column name for x-axis (categorical).
-        y: Column name for y-axis (numerical).
-        hue: Optional column name for hue separation.
-        title: Title of the plot.
-    """
-    plt.figure(figsize=(10, 6))
-    sns.boxplot(data=df, x=x, y=y, hue=hue, palette="Set3", dodge=True)
-    sns.swarmplot(data=df, x=x, y=y, hue=hue, dodge=True, color=".25", alpha=0.6)
-    plt.title(title)
-    plt.tight_layout()
-    plt.show()
-
-
-
 def plot_categorical_distributions(
     df: pd.DataFrame,
     categorical_cols: list[str],
@@ -181,3 +136,48 @@ def plot_categorical_distributions(
         plt.close()
     else:
         plt.show()
+
+
+
+def plot_correlation_matrix(
+    df: pd.DataFrame,
+    cols: list[str] | None = None,
+    title: str = "Correlation Matrix: Numerical Features",
+    figsize: tuple = (8, 6),
+    cmap: str = "coolwarm"
+) -> None:
+    """
+    Plot a correlation matrix heatmap for selected numeric features.
+
+    Args:
+        df: DataFrame containing the data.
+        cols: Optional list of numeric column names. If None, use all numeric columns.
+        title: Title of the heatmap.
+        figsize: Size of the matplotlib figure.
+        cmap: Colormap to use for the heatmap.
+    """
+    sns.set_style("whitegrid")
+
+    # Select only numeric columns
+    if cols is None:
+        corr_df = df.select_dtypes(include="number")
+    else:
+        corr_df = df[cols]
+
+    corr_matrix = corr_df.corr()
+
+    plt.figure(figsize=figsize)
+    sns.heatmap(
+        corr_matrix,
+        annot=True,
+        fmt=".2f",
+        cmap=cmap,
+        square=True,
+        linewidths=0.5,
+        cbar_kws={"shrink": 0.8}
+    )
+    plt.title(title, fontsize=14, weight="bold")
+    plt.xticks(rotation=45, ha="right")
+    plt.yticks(rotation=0)
+    plt.tight_layout()
+    plt.show()
