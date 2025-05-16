@@ -1,10 +1,9 @@
 # mastercard_challenge
 
 ![Python Version](https://img.shields.io/badge/python-3.13-blue.svg)
-[//]: # (![Build Status]&#40;https://github.com/<USERNAME>/<REPO>/actions/workflows/tests.yml/badge.svg&#41;)
-![Coverage](https://img.shields.io/codecov/c/github/<USERNAME>/<REPO>.svg)
-![License](https://img.shields.io/github/license/<USERNAME>/<REPO>.svg)
-![Last Commit](https://img.shields.io/github/last-commit/<USERNAME>/<REPO>.svg)
+![Coverage](https://img.shields.io/codecov/c/github/pawelkonior/mastercard_challenge.svg)
+![License](https://img.shields.io/github/license/pawelkonior/mastercard_challenge.svg)
+![Last Commit](https://img.shields.io/github/last-commit/pawelkonior/mastercard_challenge.svg)
 ![Notebooks](https://img.shields.io/badge/notebooks-%E2%9C%94-green.svg)
 ![Project Stage](https://img.shields.io/badge/stage-dev-lightgrey.svg)
 
