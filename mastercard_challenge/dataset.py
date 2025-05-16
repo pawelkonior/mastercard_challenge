@@ -1,29 +1,37 @@
+
+"""
+Module to load raw JSON and CSV files, optionally preprocess them, and convert them to optimized Parquet format.
+Output is saved under data/processed/
+"""
+
+import pandas as pd
 from pathlib import Path
 
-from loguru import logger
-from tqdm import tqdm
-import typer
-
-from mastercard_challenge.config import PROCESSED_DATA_DIR, RAW_DATA_DIR
-
-app = typer.Typer()
+RAW_DIR = Path("../data/raw")
+PROCESSED_DIR = Path("../data/processed")
+PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 
 
-@app.command()
-def main(
-    # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
-    input_path: Path = RAW_DATA_DIR / "dataset.csv",
-    output_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
-    # ----------------------------------------------
-):
-    # ---- REPLACE THIS WITH YOUR OWN CODE ----
-    logger.info("Processing dataset...")
-    for i in tqdm(range(10), total=10):
-        if i == 5:
-            logger.info("Something happened for iteration 5.")
-    logger.success("Processing dataset complete.")
-    # -----------------------------------------
+def convert_json_to_parquet(filename: str, output_name: str | None = None) -> None:
+    """Load line-delimited JSON and save as Parquet."""
+    json_path = RAW_DIR / filename
+    df = pd.read_json(json_path, lines=True)
+    if output_name is None:
+        output_name = filename.replace(".json", ".parquet")
+    df.to_parquet(PROCESSED_DIR / output_name, index=False)
+
+
+def convert_csv_to_parquet(filename: str, output_name: str | None = None) -> None:
+    """Load CSV file and save as Parquet."""
+    csv_path = RAW_DIR / filename
+    df = pd.read_csv(csv_path)
+    if output_name is None:
+        output_name = filename.replace(".csv", ".parquet")
+    df.to_parquet(PROCESSED_DIR / output_name, index=False)
 
 
 if __name__ == "__main__":
-    app()
+    convert_json_to_parquet("transactions.json")
+    convert_csv_to_parquet("users.csv")
+    convert_csv_to_parquet("merchants.csv")
+    print("✅ All files converted to Parquet.")
